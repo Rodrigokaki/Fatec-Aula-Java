@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.fatec.student.StudentService;
-import com.fatec.student.entities.Student;
+import com.fatec.student.dto.StudentRequest;
+import com.fatec.student.dto.StudentResponse;
 
 @RestController
 @RequestMapping("students")
@@ -26,12 +27,12 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public ResponseEntity<List<Student>> getStudent(){
+    public ResponseEntity<List<StudentResponse>> getStudent(){
         return ResponseEntity.ok(studentService.getStudents());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentByStudent(@PathVariable int id){
+    public ResponseEntity<StudentResponse> getStudentByStudent(@PathVariable int id){
         return ResponseEntity.ok(studentService.getStudentById(id));
     }
 
@@ -42,16 +43,16 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<Student> saveStudent(@RequestBody Student student){
-        Student newStudent = this.studentService.saveStudent(student);
+    public ResponseEntity<StudentResponse> saveStudent(@RequestBody StudentRequest student){
+        StudentResponse newStudent = this.studentService.saveStudent(student);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newStudent.getId()).toUri();
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newStudent.id()).toUri();
 
         return ResponseEntity.created(location).body(newStudent);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateStudent(@PathVariable int id, @RequestBody Student student){
+    public ResponseEntity<Void> updateStudent(@PathVariable int id, @RequestBody StudentRequest student){
         this.studentService.updateStudent(id, student);
         return ResponseEntity.ok().build();
     }
