@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,7 +44,7 @@ public class StudentController {
     }
 
     @PostMapping
-    public ResponseEntity<StudentResponse> saveStudent(@RequestBody StudentRequest student){
+    public ResponseEntity<StudentResponse> saveStudent(@Validated @RequestBody StudentRequest student){
         StudentResponse newStudent = this.studentService.saveStudent(student);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newStudent.id()).toUri();
@@ -52,7 +53,7 @@ public class StudentController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateStudent(@PathVariable int id, @RequestBody StudentRequest student){
+    public ResponseEntity<Void> updateStudent(@PathVariable int id, @Validated @RequestBody StudentRequest student){
         this.studentService.updateStudent(id, student);
         return ResponseEntity.ok().build();
     }
